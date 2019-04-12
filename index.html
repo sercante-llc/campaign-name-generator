@@ -30,242 +30,318 @@
           <figure class="logo-frame">
             <img src="assets/img/Sercante.png" />
           </figure>
-            <header>
-              <h1>Naming Convention Generator</h1>
-            </header>
-            <main>
-              <div class="p-xt-2">
+          <header>
+            <h1>Naming Convention Generator</h1>
+          </header>
+          <main>
+            <div class="p-xt-2">
+              <label
+                for="assetType"
+                class="custom-select custom-select_transfrom-data"
+              >
+                <select v-model="assetType" name="assetType">
+                  <option disabled value="">Select Asset Type</option>
+                  <template v-for="(asset, index) in assetTypeList">
+                    <option :key="index">{{ asset }}</option>
+                  </template>
+                </select>
+              </label>
+            </div>
+            <section v-if="assetType === 'SFDC Campaign'">
+              <div class="p-b-2">
                 <label
-                  for="assetType"
+                  for="campaignYear"
                   class="custom-select custom-select_transfrom-data"
                 >
-                  <select v-model="assetType" name="assetType">
-                    <option disabled value="">Select Asset Type</option>
-                    <template v-for="(asset, index) in assetTypeList">
-                      <option :key="index">{{ asset }}</option>
+                  <select v-model="campaignYear" required name="campaignYear">
+                    <option disabled value="">Select Year</option>
+                    <template v-for="(year, index) in yearList">
+                      <option :key="index">{{ year }}</option>
                     </template>
                   </select>
                 </label>
               </div>
-              <section v-if="assetType === 'SFDC Campaign'">
-                <div class="p-b-2">
-                  <label
-                    for="campaignYear"
-                    class="custom-select custom-select_transfrom-data"
-                  >
-                    <select v-model="campaignYear" required name="campaignYear">
-                      <option disabled value="">Select Year</option>
-                      <template v-for="(year, index) in yearList">
-                        <option :key="index">{{ year }}</option>
-                      </template>
-                    </select>
-                  </label>
-                </div>
-                <div class="p-b-2">
-                  <label
-                    for="campaignType"
-                    class="custom-select custom-select_transfrom-data"
-                  >
-                    <select v-model="campaignType" required name="campaignType">
-                      <option disabled value="">Select Type</option>
-                      <template v-for="(type, index) in typeList">
-                        <option :key="index">{{ type }}</option>
-                      </template>
-                    </select>
-                  </label>
-                </div>
-                <div class="p-b-1">
-                  <label
-                  for="name-of-initiative"
-                  >
-                  <input id="initiative" type="text" name="name-of-initiative" v-model="campaignName" placeholder="Name of initiative" required :class="{requiredInput: over80Char}">
+              <div class="p-b-2">
+                <label
+                  for="campaignType"
+                  class="custom-select custom-select_transfrom-data"
+                >
+                  <select v-model="campaignType" required name="campaignType">
+                    <option disabled value="">Select Type</option>
+                    <template v-for="(type, index) in typeList">
+                      <option :key="index">{{ type }}</option>
+                    </template>
+                  </select>
+                </label>
+              </div>
+              <div class="p-b-1">
+                <label for="name-of-initiative">
+                  <input
+                    id="initiative"
+                    type="text"
+                    name="name-of-initiative"
+                    v-model="campaignName"
+                    placeholder="Name of initiative"
+                    required
+                    :class="{requiredInput: over80Char}"
+                  />
                   <p>characters available: {{ charactersLeft }}</p>
                 </label>
-                </div>
-                <div class="p-b-2">
-                  <label
-                  for="campaign-input"
+              </div>
+              <div class="p-b-2">
+                <label for="campaign-input"
                   >Generated name
-                  <input type="text" id="campaignInput" name="campaign-input" v-model="campaignInput" disabled placeholder="Generated name">
+                  <input
+                    type="text"
+                    id="campaignInput"
+                    name="campaign-input"
+                    v-model="campaignInput"
+                    disabled
+                    placeholder="Generated name"
+                  />
                   <p>characters used: {{ charactersUsed }}/80</p>
-                  </label>
-                </div>
-                <button class="copy-btn" @click="handleCopy('campaignInput')">copy</button>
-                <button class="reset-btn" @click="handleReset">Reset</button> 
-              </section>
+                </label>
+              </div>
+              <button class="copy-btn" @click="handleCopy('campaignInput')">
+                Copy
+              </button>
+              <button class="reset-btn" @click="handleReset">Reset</button>
+            </section>
 
-
-              <section v-if="assetType === 'Email Template'">
-                <div class="p-b-2">
-                  <label
-                    for="emailYear"
-                    class="custom-select custom-select_transfrom-data"
-                  >
-                    <select v-model="emailYear" required name="emailYear">
-                      <option disabled value="">Select Year</option>
-                      <template v-for="(year, index) in yearList">
-                        <option :key="index">{{ year }}</option>
-                      </template>
-                    </select>
-                  </label>
-                </div>
-                <div class="p-b-2">
-                  <label
-                    for="emailType"
-                    class="custom-select custom-select_transfrom-data"
-                  >
-                    <select v-model="emailType" required name="emailType">
-                      <option disabled value="">Select Type</option>
-                      <template v-for="(type, index) in typeList">
-                        <option :key="index">{{ type }}</option>
-                      </template>
-                    </select>
-                  </label>
-                </div>
-                <div class="p-b-1">
-                  <label
-                  for="name-of-email"
-                  >
-                  <input id="email" type="text" name="name-of-email" v-model="emailName" placeholder="Name of email" required :class="{requiredInput: over80Char}">
-                  <p>characters available: {{ charactersLeft }}</p>
-                  </label>
-                </div>
-                <div class="p-b-2">
-                  <label
-                  for="campaign-name-two"
-                  >Generated name
-                  <input type="text" id="emailInput" name="email-input" v-model="emailInput" disabled placeholder="Generated name">
-                  <p>characters used: {{ charactersUsed }}/80</p>
-                  </label>
-                </div>
-                <button class="copy-btn" @click="handleCopy('emailInput')">copy</button>
-                <button class="reset-btn" @click="handleReset">Reset</button> 
-              </section>
-
-              
-              <section v-if="assetType === 'List'">
-                <div class="p-b-2">
-                  <label
-                    for="listYear"
-                    class="custom-select custom-select_transfrom-data"
-                  >
-                    <select v-model="listYear" required name="listYear">
-                      <option disabled value="">Select Year</option>
-                      <template v-for="(year, index) in yearList">
-                        <option :key="index">{{ year }}</option>
-                      </template>
-                    </select>
-                  </label>
-                </div>
-                <div class="p-b-1">
-                  <label
-                  for="name-of-list"
-                  >
-                  <input id="listName" type="text" name="name-of-list" v-model="listName" placeholder="Name of List" required :class="{requiredInput: over80Char}">
+            <section v-if="assetType === 'Email Template'">
+              <div class="p-b-2">
+                <label
+                  for="emailYear"
+                  class="custom-select custom-select_transfrom-data"
+                >
+                  <select v-model="emailYear" required name="emailYear">
+                    <option disabled value="">Select Year</option>
+                    <template v-for="(year, index) in yearList">
+                      <option :key="index">{{ year }}</option>
+                    </template>
+                  </select>
+                </label>
+              </div>
+              <div class="p-b-2">
+                <label
+                  for="emailType"
+                  class="custom-select custom-select_transfrom-data"
+                >
+                  <select v-model="emailType" required name="emailType">
+                    <option disabled value="">Select Type</option>
+                    <template v-for="(type, index) in typeList">
+                      <option :key="index">{{ type }}</option>
+                    </template>
+                  </select>
+                </label>
+              </div>
+              <div class="p-b-1">
+                <label for="name-of-email">
+                  <input
+                    id="email"
+                    type="text"
+                    name="name-of-email"
+                    v-model="emailName"
+                    placeholder="Name of email"
+                    required
+                    :class="{requiredInput: over80Char}"
+                  />
                   <p>characters available: {{ charactersLeft }}</p>
                 </label>
-                </div>
-                <div class="p-b-2">
-                  <label
-                  for="list-input"
+              </div>
+              <div class="p-b-2">
+                <label for="campaign-name-two"
                   >Generated name
-                  <input type="text" id="listInput" name="list-input" v-model="listInput" disabled placeholder="Generated name">
+                  <input
+                    type="text"
+                    id="emailInput"
+                    name="email-input"
+                    v-model="emailInput"
+                    disabled
+                    placeholder="Generated name"
+                  />
+                  <p>characters used: {{ charactersUsed }}/80</p>
+                </label>
+              </div>
+              <button class="copy-btn" @click="handleCopy('emailInput')">
+                Copy
+              </button>
+              <button class="reset-btn" @click="handleReset">Reset</button>
+            </section>
+
+            <section v-if="assetType === 'List'">
+              <div class="p-b-2">
+                <label
+                  for="listYear"
+                  class="custom-select custom-select_transfrom-data"
+                >
+                  <select v-model="listYear" required name="listYear">
+                    <option disabled value="">Select Year</option>
+                    <template v-for="(year, index) in yearList">
+                      <option :key="index">{{ year }}</option>
+                    </template>
+                  </select>
+                </label>
+              </div>
+              <div class="p-b-1">
+                <label for="name-of-list">
+                  <input
+                    id="listName"
+                    type="text"
+                    name="name-of-list"
+                    v-model="listName"
+                    placeholder="Name of List"
+                    required
+                    :class="{requiredInput: over80Char}"
+                  />
+                  <p>characters available: {{ charactersLeft }}</p>
+                </label>
+              </div>
+              <div class="p-b-2">
+                <label for="list-input"
+                  >Generated name
+                  <input
+                    type="text"
+                    id="listInput"
+                    name="list-input"
+                    v-model="listInput"
+                    disabled
+                    placeholder="Generated name"
+                  />
                 </label>
                 <p>characters used: {{ charactersUsed }}/80</p>
-                </div>
-                <button class="copy-btn" @click="handleCopy('listInput')">copy</button>
-                <button class="reset-btn" @click="handleReset">Reset</button> 
-              </section>
+              </div>
+              <button class="copy-btn" @click="handleCopy('listInput')">
+                Copy
+              </button>
+              <button class="reset-btn" @click="handleReset">Reset</button>
+            </section>
 
-              <section v-if="assetType === 'List Email'">
-                <div class="p-b-2">
-                  <label
-                    for="listEmailType"
-                    class="custom-select custom-select_transfrom-data"
-                  >
-                    <select v-model="listEmailType" required name="listEmailType">
-                      <option disabled value="">Select Type</option>
-                      <template v-for="(type, index) in typeList">
-                        <option :key="index">{{ type }}</option>
-                      </template>
-                    </select>
-                  </label>
-                </div>
-                <div class="p-b-1">
-                  <label
-                  for="name-of-list-email"
-                  >
-                  <input id="listEmail" type="text" name="name-of-list-email" v-model="listEmailName" placeholder="Name of list email" required :class="{requiredInput: over80Char}">
+            <section v-if="assetType === 'List Email'">
+              <div class="p-b-2">
+                <label
+                  for="listEmailType"
+                  class="custom-select custom-select_transfrom-data"
+                >
+                  <select v-model="listEmailType" required name="listEmailType">
+                    <option disabled value="">Select Type</option>
+                    <template v-for="(type, index) in typeList">
+                      <option :key="index">{{ type }}</option>
+                    </template>
+                  </select>
+                </label>
+              </div>
+              <div class="p-b-1">
+                <label for="name-of-list-email">
+                  <input
+                    id="listEmail"
+                    type="text"
+                    name="name-of-list-email"
+                    v-model="listEmailName"
+                    placeholder="Name of list email"
+                    required
+                    :class="{requiredInput: over80Char}"
+                  />
                 </label>
                 <p>characters available: {{ charactersLeft }}</p>
-                </div>
-                <div class="p-b-1">
-                  <label
-                  for="audienceName"
-                  >
-                  <input id="audience" type="text" name="audienceName" v-model="audienceName" placeholder="Name of audience" required :class="{requiredInput: over80Char}">
+              </div>
+              <div class="p-b-1">
+                <label for="audienceName">
+                  <input
+                    id="audience"
+                    type="text"
+                    name="audienceName"
+                    v-model="audienceName"
+                    placeholder="Name of audience"
+                    required
+                    :class="{requiredInput: over80Char}"
+                  />
                 </label>
                 <p>characters available: {{ charactersLeft }}</p>
               </div>
               <div class="p-b-2">
-                <label
-                for="list-email-input"
+                <label for="list-email-input"
                   >Generated name
-                  <input type="text" id="listEmailInput" name="list-email-input" v-model="listEmailInput" disabled placeholder="Generated name">
+                  <input
+                    type="text"
+                    id="listEmailInput"
+                    name="list-email-input"
+                    v-model="listEmailInput"
+                    disabled
+                    placeholder="Generated name"
+                  />
                   <p>characters used: {{ charactersUsed }}/80</p>
-                  </label>
-                </div>
-                <button class="copy-btn" @click="handleCopy('listEmailInput')">copy</button>
-                <button class="reset-btn" @click="handleReset">Reset</button> 
-              </section>
+                </label>
+              </div>
+              <button class="copy-btn" @click="handleCopy('listEmailInput')">
+                Copy
+              </button>
+              <button class="reset-btn" @click="handleReset">Reset</button>
+            </section>
 
-              <section v-if="assetType === 'Form'">
-                  <div class="p-b-2">
-                    <label
-                      for="formYear"
-                      class="custom-select custom-select_transfrom-data"
-                    >
-                      <select v-model="formYear" required name="formYear">
-                        <option disabled value="">Select Year</option>
-                        <template v-for="(year, index) in yearList">
-                          <option :key="index">{{ year }}</option>
-                        </template>
-                      </select>
-                    </label>
-                  </div>
-                  <div class="p-b-2">
-                    <label
-                      for="campaignType"
-                      class="custom-select custom-select_transfrom-data"
-                    >
-                      <select v-model="formType" required name="formType">
-                        <option disabled value="">Select Type</option>
-                        <template v-for="(type, index) in typeList">
-                          <option :key="index">{{ type }}</option>
-                        </template>
-                      </select>
-                    </label>
-                  </div>
-                  <div class="p-b-1">
-                    <label
-                    for="name-of-form"
-                    >
-                    <input id="form" type="text" name="name-of-form" v-model="formName" placeholder="Name of form" required :class="{requiredInput: over80Char}">
-                    <p>characters available: {{ charactersLeft }}</p>
-                    </label>
-                  </div>
-                  <div class="p-b-2">
-                    <label
-                    for="form-input"
-                    >Generated name
-                    <input type="text" id="formInput" name="form-input" v-model="formInput">
-                    <p>characters used: {{ charactersUsed }}/80</p>
-                    </label>
-                  </div>
-                  <button class="copy-btn" @click="handleCopy('formInput')" disabled placeholder="Generated name">copy</button>
-                  <button class="reset-btn" @click="handleReset">Reset</button> 
-                </section>
-
+            <section v-if="assetType === 'Form'">
+              <div class="p-b-2">
+                <label
+                  for="formYear"
+                  class="custom-select custom-select_transfrom-data"
+                >
+                  <select v-model="formYear" required name="formYear">
+                    <option disabled value="">Select Year</option>
+                    <template v-for="(year, index) in yearList">
+                      <option :key="index">{{ year }}</option>
+                    </template>
+                  </select>
+                </label>
+              </div>
+              <div class="p-b-2">
+                <label
+                  for="campaignType"
+                  class="custom-select custom-select_transfrom-data"
+                >
+                  <select v-model="formType" required name="formType">
+                    <option disabled value="">Select Type</option>
+                    <template v-for="(type, index) in typeList">
+                      <option :key="index">{{ type }}</option>
+                    </template>
+                  </select>
+                </label>
+              </div>
+              <div class="p-b-1">
+                <label for="name-of-form">
+                  <input
+                    id="form"
+                    type="text"
+                    name="name-of-form"
+                    v-model="formName"
+                    placeholder="Name of form"
+                    required
+                    :class="{requiredInput: over80Char}"
+                  />
+                  <p>characters available: {{ charactersLeft }}</p>
+                </label>
+              </div>
+              <div class="p-b-2">
+                <label for="form-input"
+                  >Generated name
+                  <input
+                    type="text"
+                    id="formInput"
+                    name="form-input"
+                    v-model="formInput"
+                  />
+                  <p>characters used: {{ charactersUsed }}/80</p>
+                </label>
+              </div>
+              <button
+                class="copy-btn"
+                @click="handleCopy('formInput')"
+                disabled
+                placeholder="Generated name"
+              >
+                Copy
+              </button>
+              <button class="reset-btn" @click="handleReset">Reset</button>
+            </section>
 
             {{ createCampaignName }}
           </main>
@@ -280,19 +356,33 @@
       var app = new Vue({
         el: '#app',
         data: {
-          assetTypeList: ['SFDC Campaign', 'Email Template', 'List', 'List Email', 'Form'],
+          assetTypeList: [
+            'SFDC Campaign',
+            'Email Template',
+            'List',
+            'List Email',
+            'Form'
+          ],
           assetType: 'SFDC Campaign',
           yearList: [2019, 2018, 2017],
           campaignYear: '',
           emailYear: '',
           listYear: '',
           formYear: '',
-          typeList: ['[Blog]', '[Dev Notes]', '[Promo]', '[Magic Numbers]', '[Newsletter]', '[Trial Start]', '[Referral Program]'],
+          typeList: [
+            '[Blog]',
+            '[Dev Notes]',
+            '[Promo]',
+            '[Magic Numbers]',
+            '[Newsletter]',
+            '[Trial Start]',
+            '[Referral Program]'
+          ],
           campaignType: '',
           emailType: '',
           listEmailType: '',
           formType: '',
-          
+
           campaignName: '',
           emailName: '',
           listName: '',
@@ -309,56 +399,68 @@
           over80Char: false
         },
         methods: {
-          handleCopy: function( nameInput ) {
-            var testingCodeToCopy = document.querySelector(`#${nameInput}`)
-            testingCodeToCopy.setAttribute('type', 'text')
+          handleCopy: function(nameInput) {
+            var testingCodeToCopy = document.querySelector(`#${nameInput}`);
+            testingCodeToCopy.setAttribute('type', 'text');
             testingCodeToCopy.select();
             try {
               var successful = document.execCommand('copy');
               var msg = successful ? 'successful' : 'unsuccessful';
               console.log('Testing code was copied ' + msg);
-              } catch (err) {
-                console.log('Oops, unable to copy');
+            } catch (err) {
+              console.log('Oops, unable to copy');
             }
-            window.getSelection().removeAllRanges()
+            window.getSelection().removeAllRanges();
           },
           handleReset: function() {
-            this.assetType = 'SFDC Campaign',
-            this.campaignInput = 'SFDC Campaign',
-            this.emailInput = '',
-            this.listInput = '',
-            this.listEmailInput = '',
-            this.formInput = '',
-            this.campaignYear = '',
-            this.emailYear = '',
-            this.listYear = '',
-            this.formYear = '',
-            this.campaingtype = '',
-            this.listEmailtype = '',
-            this.emailtype = '',
-            this.formtype = '',
-            this.campaignName = '',
-            this.audienceName = '',
-            this.listEmailName = '',
-            this.formName = '',
-            this.emailName = '',
-            this.listName = '',
-            this.over80Char = false
+            (this.assetType = 'SFDC Campaign'),
+              (this.campaignInput = 'SFDC Campaign'),
+              (this.emailInput = ''),
+              (this.listInput = ''),
+              (this.listEmailInput = ''),
+              (this.formInput = ''),
+              (this.campaignYear = ''),
+              (this.emailYear = ''),
+              (this.listYear = ''),
+              (this.formYear = ''),
+              (this.campaingtype = ''),
+              (this.listEmailtype = ''),
+              (this.emailtype = ''),
+              (this.formtype = ''),
+              (this.campaignName = ''),
+              (this.audienceName = ''),
+              (this.listEmailName = ''),
+              (this.formName = ''),
+              (this.emailName = ''),
+              (this.listName = ''),
+              (this.over80Char = false);
             console.log('reset');
           }
         },
         computed: {
           createCampaignName: function() {
             if (this.assetType === 'SFDC Campaign') {
-              this.campaignInput = this.campaignYear + ' ' + this.campaignType + ' ' + this.campaignName 
+              this.campaignInput =
+                this.campaignYear +
+                ' ' +
+                this.campaignType +
+                ' ' +
+                this.campaignName;
             } else if (this.assetType === 'Email Template') {
-              this.emailInput = this.emailYear + ' ' + this.emailType + ' ' + this.emailName;  
+              this.emailInput =
+                this.emailYear + ' ' + this.emailType + ' ' + this.emailName;
             } else if (this.assetType === 'List') {
               this.listInput = this.listYear + ' ' + this.listName;
             } else if (this.assetType === 'List Email') {
-              this.listEmailInput = this.listEmailType + ' ' + this.listEmailName + ' ' + this.audienceName;
+              this.listEmailInput =
+                this.listEmailType +
+                ' ' +
+                this.listEmailName +
+                ' ' +
+                this.audienceName;
             } else if (this.assetType === 'Form') {
-              this.formInput = this.formYear + ' ' + this.formType + ' ' + this.formName;
+              this.formInput =
+                this.formYear + ' ' + this.formType + ' ' + this.formName;
             }
           }
         },
@@ -367,16 +469,16 @@
             this.charactersLeft = 80 - this.campaignName.length || 0;
             this.charactersUsed = 0 + this.campaignName.length;
             if (this.charactersLeft <= 0) {
-              var name = document.getElementById('initiative')
+              var name = document.getElementById('initiative');
               console.log(name);
-              name.setAttribute('disabled', '')
+              name.setAttribute('disabled', '');
               this.over80Char = true;
-              setTimeout(function(){
-                app.over80Char = false
+              setTimeout(function() {
+                app.over80Char = false;
               }, 3000);
             }
           }
-        },
+        }
       });
     </script>
   </body>
