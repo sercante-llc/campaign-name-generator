@@ -23,18 +23,21 @@ button {
   font-weight: 600;
   margin: 0;
   margin-top: 0.65em;
-  max-width: 400px;
   padding: 1em 1.25em;
   transition: all 0.5s;
   width: 100%;
 }
 button:hover {
   background-color: rgb(255, 255, 255);
-  box-shadow: 1 1 1 rgb(0, 0, 0);
   color: rgb(0, 176, 80);
-  -moz-box-shadow: inset 0 1 2px rgb(88, 88, 88);
-  -webkit-box-shadow: inset 0 1 2px rgb(88, 88, 88);
-  box-shadow: inset 0 0 2px rgb(88, 88, 88);
+  -moz-box-shadow: inset 0 1 2px rgb(0, 176, 80);
+  -webkit-box-shadow: inset 0 1 2px rgb(0, 176, 80);
+  box-shadow: inset 0 0 2px rgb(0, 176, 80);
+  border-color: rgb(0, 176, 80);
+}
+button:active {
+  background-color:rgb(0, 176, 80);
+  color: rgb(255, 255, 255);
 }
 @media screen and (min-width: 560px) {
   main button {
@@ -52,17 +55,17 @@ button:hover {
   justify-content: space-between;
   align-items: baseline;
 }
-.p-x-1 {
-  padding: 0 0.5rem;
-}
-.p-xt-1 {
-  padding: 0.25rem 0.5rem 0 0.5rem;
-}
 .p-xt-2 {
-  padding: 1.5rem 0.5rem 0 0.5rem;
+  padding: 1.5rem 0;
 }
 .p-b-2 {
   padding-bottom: 1.5rem;
+}
+.p-b-1 {
+  padding-bottom: .75rem;
+}
+.p-b-05 {
+  padding-bottom: .5rem;
 }
 .align-right {
   text-align: right;
@@ -103,8 +106,8 @@ button:hover {
 
 /*_______________________ header _______________________*/
 header h1 {
-  font-family: 'Caveat', cursive;
   font-size: 2em;
+  line-height: 2;
   margin: 0;
   margin-bottom: 0.15em;
   margin-top: 0.25em;
@@ -126,10 +129,11 @@ header span {
 }
 @media screen and (min-width: 560px) {
   header h1 {
-    font-size: 3em;
+    font-size: 2.25em;
     margin-bottom: 0;
   }
 }
+
 /*_______________________ main _______________________*/
 main .textarea-frame {
   text-align: center;
@@ -141,7 +145,7 @@ main textarea {
   box-shadow: 0px 2px 6px 2px #cfcfcf;
   color: rgb(88, 88, 88);
   font-size: 0.8em;
-  height: 250px;
+  height: 150px;
   margin: 0 auto;
   padding: 0.75em 1em;
   width: 99%;
@@ -166,28 +170,32 @@ main .custom-select {
 main .custom-select_transfrom-data select {
   border: 0;
 }
-main select {
+main select, main input {
   border: 1px solid rgb(0, 0, 0);
   outline: none;
   background: transparent;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  border-radius: 0;
+  border-radius: 0.25em;
   margin: 0;
   display: block;
   width: 100%;
   padding: 1em 3.5em 1em 0.75em;
   line-height: 1;
-  font-size: 0.9em;
+  font-size: 0.81em;
   color: #ffffff;
 }
+main input {
+  color: #333;
+}
+
 main .custom-select:after {
   position: absolute;
   right: 0;
   top: 0;
   width: 1.5em;
-  height: 100%;
+  height: auto;
   content: '\2228';
   text-align: center;
   color: #ffffff;
@@ -196,8 +204,11 @@ main .custom-select:after {
   z-index: -1;
 }
 main p {
-  margin-top: 2.5em;
+  color: rgb(88, 88, 88);
+  font-size: .85em;
+  margin: 0;
   padding: 0 0.25em;
+  text-align: right;
 }
 main p.error-message {
   padding: 0;
@@ -206,6 +217,11 @@ main p.error-message {
   font-size: 1.25em;
   color: rgb(255, 0, 0);
   margin: 0.5em 0;
+}
+main .requiredInput {
+  -moz-box-shadow: 0px 2px 6px 2px rgb(255, 0, 0);
+  -webkit-box-shadow: 0px 2px 6px 2px rgb(255, 0, 0);
+  box-shadow: 0px 2px 6px 2px rgb(255, 0, 0);  
 }
 
 @media screen and (min-width: 560px) {
@@ -223,11 +239,6 @@ main p.error-message {
     flex-grow: 2;
   }
 }
-
-/*_______________________ second screen _______________________*/
-.stepTwo {
-  padding: 0 0.5em;
-}
 .reset-btn,
 .copy-btn {
   color: rgb(255, 255, 255);
@@ -238,27 +249,19 @@ main p.error-message {
 .reset-btn {
   background-color: rgb(255, 0, 0);
 }
-.data-chunk-frame {
-  border-radius: 0.25em;
-  -moz-box-shadow: 0px 2px 6px 2px #cfcfcf;
-  -webkit-box-shadow: 0px 2px 6px 2px #cfcfcf;
-  box-shadow: 0px 2px 6px 2px #cfcfcf;
-  color: rgb(88, 88, 88);
-  font-size: 0.8em;
-  margin: 0.5rem auto;
-  padding: 0.75em 1em;
-  width: 99%;
+.reset-btn:hover {
+  color: rgb(255, 0, 0);
+  background-color:  rgb(255, 255, 255);
+  color:  rgb(255, 0, 0);
+  -moz-box-shadow: inset 0 1 2px  rgb(255, 0, 0);
+  -webkit-box-shadow: inset 0 1 2px  rgb(255, 0, 0);
+  box-shadow: inset 0 0 2px  rgb(255, 0, 0);
+  border-color:  rgb(255, 0, 0);
 }
-.prev-btn,
-.next-btn {
-  padding: 0.15rem 0.5rem;
-  width: auto;
+.reset-btn:active {
+  background-color:rgb(255, 0, 0);
+  color: rgb(255, 255, 255);
 }
-.prev-btn,
-.reset-btn {
-  margin-right: 0.25rem;
-}
-
 /*_______________________ footer _______________________*/
 footer {
   background-color: rgb(0, 0, 0);

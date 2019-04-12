@@ -30,93 +30,245 @@
           <figure class="logo-frame">
             <img src="assets/img/Sercante.png" />
           </figure>
-          <!--stepOne-->
-          <div id="vanishingContent" v-if="displayCard === 'stepOne'">
             <header>
-              <h1>Creuz your way through data</h1>
-              <span>SFDC Report Line Splitter / Pardot Dynamic lists</span>
+              <h1>Naming Convention Generator</h1>
             </header>
             <main>
-              <div class="textarea-frame">
-                <textarea
-                  id="thetext"
-                  placeholder="Paste your text"
-                  v-model="userData"
-                ></textarea>
-              </div>
-              <div class="drop-down-frame">
-                <label for="splitSize" class="custom-select">
-                  <select v-model="chunkSize">
-                    <option disabled value="">Select Data Chunk Size</option>
-                    <template v-for="(data, index) in dataSplitSizeOptions">
-                      <option :key="index">{{ data }}</option>
-                    </template>
-                  </select>
-                </label>
-              </div>
-              <p v-show="formError" class="error-message">{{ errorMessage }}</p>
-              <p>
-                Paste your text into the text box above and click the 'Split the
-                Data' button. You can try the sample data as well just to see
-                this work
-              </p>
-              <div class="button-frame">
-                <button @click="checkForData()">Split the Data</button>
+              <div class="p-xt-2">
                 <label
-                  for="transformDataOptions"
+                  for="assetType"
                   class="custom-select custom-select_transfrom-data"
                 >
-                  <select v-model="transformOption">
-                    <option disabled value="">Select Data Manipulation</option>
-                    <template v-for="(option, index) in transformDataOptions">
-                      <option :key="index">{{ option }}</option>
+                  <select v-model="assetType" name="assetType">
+                    <option disabled value="">Select Asset Type</option>
+                    <template v-for="(asset, index) in assetTypeList">
+                      <option :key="index">{{ asset }}</option>
                     </template>
                   </select>
                 </label>
-                <button @click="loadSampleData()">Sample Data</button>
               </div>
-            </main>
-          </div>
-          <!--/stepOne-->
-          <!--stepTwo-->
-          <div class="stepTwo" v-if="displayCard === 'stepTwo'">
-            <div v-if="semiToColon">
-              <p>{{ data }}</p>
-            </div>
-            <!-- <div v-else>
-              <template v-for="(chunk, index) in chunkedDataList">
-                <span>{{ chunkedDataList.length }}</span>
-                <button class="copy-button">copy text</button>
-                <p :key="index">{{ chunk }}</p>
-              </template>
-            </div> -->
-            <div v-else class="p-b-2">
-              <div class="flex-box_between p-xt-2">
-                <div>
-                  <span
-                    >section {{ dataChunkIndex + 1 }} of
-                    {{ chunkedDataList.length }}</span
+              <section v-if="assetType === 'SFDC Campaign'">
+                <div class="p-b-2">
+                  <label
+                    for="campaignYear"
+                    class="custom-select custom-select_transfrom-data"
                   >
+                    <select v-model="campaignYear" required name="campaignYear">
+                      <option disabled value="">Select Year</option>
+                      <template v-for="(year, index) in yearList">
+                        <option :key="index">{{ year }}</option>
+                      </template>
+                    </select>
+                  </label>
                 </div>
-                <div class="flex-box">
-                  <button class="prev-btn" @click="handlePrev()">
-                    &lt;
-                  </button>
-                  <button class="next-btn" @click="handleNext()">
-                    &gt;
-                  </button>
+                <div class="p-b-2">
+                  <label
+                    for="campaignType"
+                    class="custom-select custom-select_transfrom-data"
+                  >
+                    <select v-model="campaignType" required name="campaignType">
+                      <option disabled value="">Select Type</option>
+                      <template v-for="(type, index) in typeList">
+                        <option :key="index">{{ type }}</option>
+                      </template>
+                    </select>
+                  </label>
                 </div>
+                <div class="p-b-1">
+                  <label
+                  for="name-of-initiative"
+                  >
+                  <input id="initiative" type="text" name="name-of-initiative" v-model="campaignName" placeholder="Name of initiative" required :class="{requiredInput: over80Char}">
+                  <p>characters available: {{ charactersLeft }}</p>
+                </label>
+                </div>
+                <div class="p-b-2">
+                  <label
+                  for="campaign-input"
+                  >Generated name
+                  <input type="text" id="campaignInput" name="campaign-input" v-model="campaignInput" disabled placeholder="Generated name">
+                  <p>characters used: {{ charactersUsed }}/80</p>
+                  </label>
+                </div>
+                <button class="copy-btn" @click="handleCopy('campaignInput')">copy</button>
+                <button class="reset-btn" @click="handleReset">Reset</button> 
+              </section>
+
+
+              <section v-if="assetType === 'Email Template'">
+                <div class="p-b-2">
+                  <label
+                    for="emailYear"
+                    class="custom-select custom-select_transfrom-data"
+                  >
+                    <select v-model="emailYear" required name="emailYear">
+                      <option disabled value="">Select Year</option>
+                      <template v-for="(year, index) in yearList">
+                        <option :key="index">{{ year }}</option>
+                      </template>
+                    </select>
+                  </label>
+                </div>
+                <div class="p-b-2">
+                  <label
+                    for="emailType"
+                    class="custom-select custom-select_transfrom-data"
+                  >
+                    <select v-model="emailType" required name="emailType">
+                      <option disabled value="">Select Type</option>
+                      <template v-for="(type, index) in typeList">
+                        <option :key="index">{{ type }}</option>
+                      </template>
+                    </select>
+                  </label>
+                </div>
+                <div class="p-b-1">
+                  <label
+                  for="name-of-email"
+                  >
+                  <input id="email" type="text" name="name-of-email" v-model="emailName" placeholder="Name of email" required :class="{requiredInput: over80Char}">
+                  <p>characters available: {{ charactersLeft }}</p>
+                  </label>
+                </div>
+                <div class="p-b-2">
+                  <label
+                  for="campaign-name-two"
+                  >Generated name
+                  <input type="text" id="emailInput" name="email-input" v-model="emailInput" disabled placeholder="Generated name">
+                  <p>characters used: {{ charactersUsed }}/80</p>
+                  </label>
+                </div>
+                <button class="copy-btn" @click="handleCopy('emailInput')">copy</button>
+                <button class="reset-btn" @click="handleReset">Reset</button> 
+              </section>
+
+              
+              <section v-if="assetType === 'List'">
+                <div class="p-b-2">
+                  <label
+                    for="listYear"
+                    class="custom-select custom-select_transfrom-data"
+                  >
+                    <select v-model="listYear" required name="listYear">
+                      <option disabled value="">Select Year</option>
+                      <template v-for="(year, index) in yearList">
+                        <option :key="index">{{ year }}</option>
+                      </template>
+                    </select>
+                  </label>
+                </div>
+                <div class="p-b-1">
+                  <label
+                  for="name-of-list"
+                  >
+                  <input id="listName" type="text" name="name-of-list" v-model="listName" placeholder="Name of List" required :class="{requiredInput: over80Char}">
+                  <p>characters available: {{ charactersLeft }}</p>
+                </label>
+                </div>
+                <div class="p-b-2">
+                  <label
+                  for="list-input"
+                  >Generated name
+                  <input type="text" id="listInput" name="list-input" v-model="listInput" disabled placeholder="Generated name">
+                </label>
+                <p>characters used: {{ charactersUsed }}/80</p>
+                </div>
+                <button class="copy-btn" @click="handleCopy('listInput')">copy</button>
+                <button class="reset-btn" @click="handleReset">Reset</button> 
+              </section>
+
+              <section v-if="assetType === 'List Email'">
+                <div class="p-b-2">
+                  <label
+                    for="listEmailType"
+                    class="custom-select custom-select_transfrom-data"
+                  >
+                    <select v-model="listEmailType" required name="listEmailType">
+                      <option disabled value="">Select Type</option>
+                      <template v-for="(type, index) in typeList">
+                        <option :key="index">{{ type }}</option>
+                      </template>
+                    </select>
+                  </label>
+                </div>
+                <div class="p-b-1">
+                  <label
+                  for="name-of-list-email"
+                  >
+                  <input id="listEmail" type="text" name="name-of-list-email" v-model="listEmailName" placeholder="Name of list email" required :class="{requiredInput: over80Char}">
+                </label>
+                <p>characters available: {{ charactersLeft }}</p>
+                </div>
+                <div class="p-b-1">
+                  <label
+                  for="audienceName"
+                  >
+                  <input id="audience" type="text" name="audienceName" v-model="audienceName" placeholder="Name of audience" required :class="{requiredInput: over80Char}">
+                </label>
+                <p>characters available: {{ charactersLeft }}</p>
               </div>
-              <p id="dataChunk" class="data-chunk-frame">{{ dataChunk }}</p>
-              <div class="p-xt-1">
-                <button @click="handleReset()" class="reset-btn">
-                  Reset
-                </button>
-                <button class="copy-btn">copy</button>
-              </div>
-            </div>
-          </div>
-          <!--stepTwo-->
+              <div class="p-b-2">
+                <label
+                for="list-email-input"
+                  >Generated name
+                  <input type="text" id="listEmailInput" name="list-email-input" v-model="listEmailInput" disabled placeholder="Generated name">
+                  <p>characters used: {{ charactersUsed }}/80</p>
+                  </label>
+                </div>
+                <button class="copy-btn" @click="handleCopy('listEmailInput')">copy</button>
+                <button class="reset-btn" @click="handleReset">Reset</button> 
+              </section>
+
+              <section v-if="assetType === 'Form'">
+                  <div class="p-b-2">
+                    <label
+                      for="formYear"
+                      class="custom-select custom-select_transfrom-data"
+                    >
+                      <select v-model="formYear" required name="formYear">
+                        <option disabled value="">Select Year</option>
+                        <template v-for="(year, index) in yearList">
+                          <option :key="index">{{ year }}</option>
+                        </template>
+                      </select>
+                    </label>
+                  </div>
+                  <div class="p-b-2">
+                    <label
+                      for="campaignType"
+                      class="custom-select custom-select_transfrom-data"
+                    >
+                      <select v-model="formType" required name="formType">
+                        <option disabled value="">Select Type</option>
+                        <template v-for="(type, index) in typeList">
+                          <option :key="index">{{ type }}</option>
+                        </template>
+                      </select>
+                    </label>
+                  </div>
+                  <div class="p-b-1">
+                    <label
+                    for="name-of-form"
+                    >
+                    <input id="form" type="text" name="name-of-form" v-model="formName" placeholder="Name of form" required :class="{requiredInput: over80Char}">
+                    <p>characters available: {{ charactersLeft }}</p>
+                    </label>
+                  </div>
+                  <div class="p-b-2">
+                    <label
+                    for="form-input"
+                    >Generated name
+                    <input type="text" id="formInput" name="form-input" v-model="formInput">
+                    <p>characters used: {{ charactersUsed }}/80</p>
+                    </label>
+                  </div>
+                  <button class="copy-btn" @click="handleCopy('formInput')" disabled placeholder="Generated name">copy</button>
+                  <button class="reset-btn" @click="handleReset">Reset</button> 
+                </section>
+
+
+            {{ createCampaignName }}
+          </main>
         </div>
         <footer>
           <p>&copy; 2019 Secante</p>
@@ -128,146 +280,103 @@
       var app = new Vue({
         el: '#app',
         data: {
-          displayCard: 'stepOne',
-          dataSplitSizeOptions: ['250', '1000'],
-          userData: '',
-          chunkedDataList: [],
-          transformDataOptions: [
-            'Semicolons to Commas',
-            'Commas to Semicolons'
-          ],
-          transformOption: '',
-          chunkSize: '',
-          dataChunk: '',
-          dataChunkIndex: -1,
-          semiToColon: false,
-          formError: false,
-          errorMessage: ''
+          assetTypeList: ['SFDC Campaign', 'Email Template', 'List', 'List Email', 'Form'],
+          assetType: 'SFDC Campaign',
+          yearList: [2019, 2018, 2017],
+          campaignYear: '',
+          emailYear: '',
+          listYear: '',
+          formYear: '',
+          typeList: ['[Blog]', '[Dev Notes]', '[Promo]', '[Magic Numbers]', '[Newsletter]', '[Trial Start]', '[Referral Program]'],
+          campaignType: '',
+          emailType: '',
+          listEmailType: '',
+          formType: '',
+          
+          campaignName: '',
+          emailName: '',
+          listName: '',
+          formName: '',
+          listEmailName: '',
+          audienceName: '',
+          campaignInput: '',
+          emailInput: '',
+          listEmailInput: '',
+          listInput: '',
+          formInput: '',
+          charactersLeft: 80,
+          charactersUsed: 0,
+          over80Char: false
         },
         methods: {
-          loadSampleData: function() {
-            this.userData = // eslint-disable-next-line quotes
-              "Afghanistan, Albania, Algeria, American Samoa, Andorra, Angola, Anguilla, Antarctica, Antigua and Barbuda, Argentina, Armenia, Aruba, Australia, Austria, Azerbaijan, Bahamas, Bahrain, Bangladesh, Barbados, Belarus, Belgium, Belize, Benin, Bermuda, Bhutan, Bolivia, Bosnia and Herzegovina, Botswana, Bouvet Island, Brazil, British Indian Ocean Territory, Brunei Darussalam, Bulgaria, Burkina Faso, Burundi, Cambodia, Cameroon, Canada, Cape Verde, Cayman Islands, Central African Republic, Chad, Chile, China, Christmas Island, Cocos (Keeling) Islands, Colombia, Comoros, Congo, Congo, The Democratic Republic of The, Cook Islands, Costa Rica, Cote D'ivoire, Croatia, Cuba, Cyprus, Czech Republic, Denmark, Djibouti, Dominica, Dominican Republic, Ecuador, Egypt, El Salvador, Equatorial Guinea, Eritrea, Estonia, Ethiopia, Falkland Islands(Malvinas), Faroe Islands, Fiji, Finland, France, French Guiana, French Polynesia, French Southern Territories, Gabon, Gambia, Georgia, Germany, Ghana, Gibraltar, Greece, Greenland, Grenada, Guadeloupe, Guam, Guatemala, Guinea, Guinea- bissau, Guyana, Haiti, Heard Island and Mcdonald Islands, Holy See(Vatican City State), Honduras, Hong Kong, Hungary, Iceland, India, Indonesia, Iran, Islamic Republic of, Iraq, Ireland, Israel, Italy, Jamaica, Japan, Jordan, Kazakhstan, Kenya, Kiribati, Korea, Democratic People's Republic of, Korea, Republic of, Kuwait, Kyrgyzstan, Lao People's Democratic Republic, Latvia, Lebanon, Lesotho, Liberia, Libyan Arab Jamahiriya, Liechtenstein, Lithuania, Luxembourg, Macao, Macedonia, The Former Yugoslav Republic of, Madagascar, Malawi, Malaysia, Maldives, Mali, Malta, Marshall Islands, Martinique, Mauritania, Mauritius, Mayotte, Mexico, Micronesia, Federated States of, Moldova, Republic of, Monaco, Mongolia, Montserrat, Morocco, Mozambique, Myanmar, Namibia, Nauru, Nepal, Netherlands, Netherlands Antilles, New Caledonia, New Zealand, Nicaragua, Niger, Nigeria, Niue, Norfolk Island, Northern Mariana Islands, Norway, Oman, Pakistan, Palau, Palestinian Territory, Occupied, Panama, Papua New Guinea, Paraguay, Peru, Philippines, Pitcairn, Poland, Portugal, Puerto Rico, Qatar, Reunion, Romania, Russian Federation, Rwanda, Saint Helena, Saint Kitts and Nevis, Saint Lucia, Saint Pierre and Miquelon, Saint Vincent and The Grenadines, Samoa, San Marino, Sao Tome and Principe, Saudi Arabia, Senegal, Serbia and Montenegro, Seychelles, Sierra Leone, Singapore, Slovakia, Slovenia, Solomon Islands, Somalia, South Africa, South Georgia and The South Sandwich Islands, Spain, Sri Lanka, Sudan, Suriname, Svalbard and Jan Mayen, Swaziland, Sweden, Switzerland, Syrian Arab Republic, Taiwan, Province of China, Tajikistan, Tanzania, United Republic of, Thailand, Timor- leste, Togo, Tokelau, Tonga, Trinidad and Tobago, Tunisia, Turkey, Turkmenistan, Turks and Caicos Islands, Tuvalu, Uganda, Ukraine, United Arab Emirates, United Kingdom, United States, United States Minor Outlying Islands, Uruguay, Uzbekistan, Vanuatu, Venezuela, Viet Nam, Virgin Islands, British, Virgin Islands, U.S., Wallis and Futuna, Western Sahara, Yemen, Zambia, Zimbabwe";
-          },
-          chunkTheData: function() {
-            this.chunkedDataList = [];
-            this.dataChunkIndex = 0;
-            this.checkForCommaOrSemi();
-            var originalString = this.userData;
-            var chunk = '';
-            var subString = '';
-            var n = '';
-            this.displayCard = 'stepTwo';
-            var num = parseInt(this.chunkSize);
-            var counter = 0;
-            while (originalString.length > 0) {
-              chunk = originalString.substring(0, this.chunkSize);
-              if (this.transformOption === 'Semicolons to Commas')
-                if (chunk.length >= this.chunkSize) {
-                  n = chunk.lastIndexOf(',');
-                } else {
-                  n = chunk.length;
-                }
-
-              if (this.transformOption === 'Commas to Semicolons')
-                if (chunk.length >= this.chunkSize) {
-                  n = chunk.lastIndexOf(';');
-                } else {
-                  n = chunk.length;
-                }
-
-              originalString.substring(0, n);
-              this.chunkedDataList.push(originalString.substring(0, n));
-              originalString = originalString
-                .substring(n)
-                .replace(/(^,)|(^;)|(;$)|(,$)/, '');
-              counter++;
-              if (counter >= 100 || originalString.length === 0) {
-                break;
-              }
+          handleCopy: function( nameInput ) {
+            var testingCodeToCopy = document.querySelector(`#${nameInput}`)
+            testingCodeToCopy.setAttribute('type', 'text')
+            testingCodeToCopy.select();
+            try {
+              var successful = document.execCommand('copy');
+              var msg = successful ? 'successful' : 'unsuccessful';
+              console.log('Testing code was copied ' + msg);
+              } catch (err) {
+                console.log('Oops, unable to copy');
             }
-          },
-          checkForData: function() {
-            if (!this.userData) {
-              this.formError = true;
-              this.errorMessage = 'Silly human. No data. No data spliting';
-            } else if (!this.chunkSize) {
-              this.formError = true;
-              this.errorMessage = 'Please select a charater limit value';
-            } else {
-              this.chunkTheData();
-            }
-          },
-          checkForCommaOrSemi: function() {
-            for (char of this.userData) {
-              if (char === ',') {
-                this.transformOption = 'Semicolons to Commas';
-              }
-              if (char === ';') {
-                this.transformOption = 'Commas to Semicolons';
-              }
-            }
-          },
-          changeSemicolonToComma: function() {
-            this.userData = this.userData.replace(/;/g, ',');
-            //this.semiToColon = true;
-            // this.displayCard = 'stepTwo';
-          },
-          changeCommaToSemicolon: function() {
-            this.userData = this.userData.replace(/,/g, ';');
-            //this.semiToColon = true;
-            //this.displayCard = 'stepTwo';
+            window.getSelection().removeAllRanges()
           },
           handleReset: function() {
-            this.displayCard = 'stepOne';
-            this.chunkSize = '';
-            this.transformOption = '';
-            this.chunkedDataList = [];
-            this.dataChunkIndex = 0;
-          },
-          handleNext: function() {
-            if (this.dataChunkIndex < this.chunkedDataList.length - 1) {
-              this.dataChunkIndex += 1;
-            } else {
-              console.log('you have reached the end');
-            }
-          },
-          handlePrev: function() {
-            if (this.dataChunkIndex > 0) {
-              this.dataChunkIndex -= 1;
-            } else {
-              console.log('you have reached the start');
+            this.assetType = 'SFDC Campaign',
+            this.campaignInput = 'SFDC Campaign',
+            this.emailInput = '',
+            this.listInput = '',
+            this.listEmailInput = '',
+            this.formInput = '',
+            this.campaignYear = '',
+            this.emailYear = '',
+            this.listYear = '',
+            this.formYear = '',
+            this.campaingtype = '',
+            this.listEmailtype = '',
+            this.emailtype = '',
+            this.formtype = '',
+            this.campaignName = '',
+            this.audienceName = '',
+            this.listEmailName = '',
+            this.formName = '',
+            this.emailName = '',
+            this.listName = '',
+            this.over80Char = false
+            console.log('reset');
+          }
+        },
+        computed: {
+          createCampaignName: function() {
+            if (this.assetType === 'SFDC Campaign') {
+              this.campaignInput = this.campaignYear + ' ' + this.campaignType + ' ' + this.campaignName 
+            } else if (this.assetType === 'Email Template') {
+              this.emailInput = this.emailYear + ' ' + this.emailType + ' ' + this.emailName;  
+            } else if (this.assetType === 'List') {
+              this.listInput = this.listYear + ' ' + this.listName;
+            } else if (this.assetType === 'List Email') {
+              this.listEmailInput = this.listEmailType + ' ' + this.listEmailName + ' ' + this.audienceName;
+            } else if (this.assetType === 'Form') {
+              this.formInput = this.formYear + ' ' + this.formType + ' ' + this.formName;
             }
           }
         },
         watch: {
-          // whenever question changes, this function will run
-          chunkSize: function() {
-            if (this.chunkSize) {
-              this.formError = false;
-            }
-          },
-          userData: function() {
-            if (this.userData) {
-              this.formError = false;
-            }
-          },
-          dataChunkIndex: function() {
-            console.log(this.dataChunkIndex);
-            this.dataChunk = this.chunkedDataList[this.dataChunkIndex];
-          },
-          // whenever question changes, this function will run
-          transformOption: function() {
-            console.log(this.transformOption);
-            switch (this.transformOption) {
-              case 'Commas to Semicolons':
-                this.changeCommaToSemicolon();
-                break;
-              case 'Semicolons to Commas':
-                this.changeSemicolonToComma();
+          campaignName: function() {
+            this.charactersLeft = 80 - this.campaignName.length || 0;
+            this.charactersUsed = 0 + this.campaignName.length;
+            if (this.charactersLeft <= 0) {
+              var name = document.getElementById('initiative')
+              console.log(name);
+              name.setAttribute('disabled', '')
+              this.over80Char = true;
+              setTimeout(function(){
+                app.over80Char = false
+              }, 3000);
             }
           }
-        }
+        },
       });
     </script>
   </body>
